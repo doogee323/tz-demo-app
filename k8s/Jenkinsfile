@@ -98,7 +98,6 @@ spec:
             steps {
                 sh """
                 git config --global --add safe.directory ${WORKSPACE}
-                docker login harbor.default.${CLUSTER_NAME}.${DOMAIN} --username admin --password ${DOCKER_PASSWORD}
                 """
             }
         }
@@ -140,7 +139,9 @@ spec:
                         container("kaniko2") {
                             script {
                                 sh """
-                                /kaniko/executor --dockerfile=Dockerfile --context=/root/shared-data/${DOCKER_NAME} --build-arg NODE_ENV=${NODE_ENV} --destination=${REPOSITORY_TAG} --use-new-run --cleanup
+                                /kaniko/executor --dockerfile=Dockerfile --context=/root/shared-data/${DOCKER_NAME} --build-arg NODE_ENV=${NODE_ENV} \
+                                    --destination=${REPOSITORY_TAG} --use-new-run --cleanup \
+                                    --registry-user=admin --registry-pass=${DOCKER_PASSWORD}
                                 """
                             }
                         }

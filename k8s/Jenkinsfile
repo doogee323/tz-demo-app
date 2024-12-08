@@ -96,7 +96,10 @@ spec:
     stages {
        stage("Setup Git Safe Directory") {
             steps {
-                sh "git config --global --add safe.directory ${WORKSPACE}"
+                sh "
+                git config --global --add safe.directory ${WORKSPACE}
+                docker login harbor.default.${CLUSTER_NAME}.${DOMAIN} --username admin --password ${DOCKER_PASSWORD}
+                """
             }
         }
         stage("Git SCM") {
@@ -118,11 +121,13 @@ spec:
             steps {
                 container("devops2") {
                     script {
-                        sh "rm -rf ./${K8S_FILE}"
-                        sh "cp -Rp k8s/${K8S_SOURCE} ./${K8S_FILE}"
-                        sh "cp -Rp /home/jenkins/agent/workspace/${DOCKER_NAME} /root/shared-data/${DOCKER_NAME}"
-                        sh "bash ./k8s/k8s.sh vault_config devops-dev/tz-demo-app"
-                        sh "cp -Rf .env /root/shared-data/tz-demo-app/.env"
+                        sh """
+                        rm -rf ./${K8S_FILE}
+                        cp -Rp k8s/${K8S_SOURCE} ./${K8S_FILE}
+                        cp -Rp /home/jenkins/agent/workspace/${DOCKER_NAME} /root/shared-data/${DOCKER_NAME}
+                        bash ./k8s/k8s.sh vault_config devops-dev/tz-demo-app
+                        cp -Rf .env /root/shared-data/tz-demo-app/.env
+                        """
                     }
                 }
             }
@@ -135,7 +140,6 @@ spec:
                         container("kaniko2") {
                             script {
                                 sh """
-                                docker login harbor.default.${CLUSTER_NAME}.${DOMAIN} --username admin --password ${DOCKER_PASSWORD}
                                 /kaniko/executor --dockerfile=Dockerfile --context=/root/shared-data/${DOCKER_NAME} --build-arg NODE_ENV=${NODE_ENV} --destination=${REPOSITORY_TAG} --use-new-run --cleanup
                                 """
                             }

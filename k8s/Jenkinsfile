@@ -96,7 +96,7 @@ spec:
     stages {
        stage("Setup Git Safe Directory") {
             steps {
-                sh "
+                sh """
                 git config --global --add safe.directory ${WORKSPACE}
                 docker login harbor.default.${CLUSTER_NAME}.${DOMAIN} --username admin --password ${DOCKER_PASSWORD}
                 """

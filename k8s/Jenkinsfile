@@ -94,6 +94,11 @@ spec:
     }
 
     stages {
+       stage("Setup Git Safe Directory") {
+            steps {
+                sh "git config --global --add safe.directory ${WORKSPACE}"
+            }
+        }
         stage("Git SCM") {
             steps {
                 checkout([
@@ -130,7 +135,6 @@ spec:
                         container("kaniko2") {
                             script {
                                 sh """
-                                git config --global --add safe.directory ${WORKSPACE}
                                 /kaniko/executor --dockerfile=Dockerfile --context=/root/shared-data/${DOCKER_NAME} --build-arg NODE_ENV=${NODE_ENV} --destination=${REPOSITORY_TAG} --use-new-run --cleanup
                                 """
                             }

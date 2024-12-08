@@ -135,8 +135,8 @@ spec:
                         container("kaniko2") {
                             script {
                                 sh """
-                                echo /kaniko/executor --dockerfile=Dockerfile --context=/root/shared-data/${DOCKER_NAME} --build-arg NODE_ENV=${NODE_ENV} --destination=${REPOSITORY_TAG} --use-new-run --cleanup
-                                sleep 1000
+                                docker login harbor.default.${CLUSTER_NAME}.${DOMAIN} --username admin --password ${DOCKER_PASSWORD}
+                                /kaniko/executor --dockerfile=Dockerfile --context=/root/shared-data/${DOCKER_NAME} --build-arg NODE_ENV=${NODE_ENV} --destination=${REPOSITORY_TAG} --use-new-run --cleanup
                                 """
                             }
                         }

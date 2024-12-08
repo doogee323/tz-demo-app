@@ -77,6 +77,8 @@ spec:
     command: ["sleep"]
     args: ["99d"]
     volumeMounts:
+      - name: harbor-ca-cert
+        mountPath: /kaniko/certs
       - name: shared-data
         mountPath: /root/shared-data
       - name: docker-config
@@ -84,6 +86,9 @@ spec:
 
   restartPolicy: Never
   volumes:
+    - name: harbor-ca-cert
+      configMap:
+        name: harbor-ca-cert
     - name: shared-data
       emptyDir: {}
     - name: docker-config
@@ -141,7 +146,7 @@ spec:
                                 sh """
                                 /kaniko/executor --dockerfile=Dockerfile --context=/root/shared-data/${DOCKER_NAME} --build-arg NODE_ENV=${NODE_ENV} \
                                     --destination=${REPOSITORY_TAG} --use-new-run --cleanup \
-                                    --insecure --force
+                                    --ssl-cert-dir=/kaniko/certs --insecure --force
                                 """
                             }
                         }

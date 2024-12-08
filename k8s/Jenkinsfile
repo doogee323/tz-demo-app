@@ -140,7 +140,10 @@ spec:
         stage('Deploy the service to Cluster') {
             steps {
                 container("devops2") {
-                    sh "bash ./k8s/k8s.sh apply"
+                    sh """
+                    git config --global --add safe.directory ${WORKSPACE}
+                    bash ./k8s/k8s.sh apply
+                    """
                 }
             }
         }

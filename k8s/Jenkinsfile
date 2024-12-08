@@ -48,7 +48,7 @@ spec:
   serviceAccountName: jenkins
   containers:
   - name: devops2
-    image: doogee323/devops-utils2:latest
+    image: topzone8713/devops-utils2:latest
     resources:
       requests:
         memory: 200Mi

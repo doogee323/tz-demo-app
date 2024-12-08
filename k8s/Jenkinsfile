@@ -2,10 +2,10 @@ pipeline {
 
     environment {
         // Git Repository Information
-        GITHUP_ID = "topzone8713"
+        GITHUP_ID = "doogee323"
         GIT_URL = "https://github.com/${GITHUP_ID}/tz-demo-app.git"
-        GIT_BRANCH = "devops"
-        GIT_COMMITTER_EMAIL = "topzone8713@gmail.com"
+        GIT_BRANCH = "vagrant"
+        GIT_COMMITTER_EMAIL = "doogee323@gmail.com"
 
         // Docker and Application Configuration
         BUILD_NUMBER = "${env.BUILD_NUMBER}"
@@ -18,25 +18,22 @@ pipeline {
         K8S_FILE = "k8s.yaml"
         USE_ARGOCD = "true"
 
-        // AWS and Kubernetes Configuration
-        ACCOUNT_ID = "336363860990"
-        AWS_DEFAULT_REGION = "ap-northeast-2"
-        DOMAIN = "seerslab.io"
-        CLUSTER_NAME = "eks-main-t"
+        // Kubernetes Configuration
+        DOMAIN = "topzone.me"
+        CLUSTER_NAME = "topzone-k8s"
         CERTIFICATE="aaaaaa"
 
-        KUBECTL = "kubectl -n ${NAMESPACE} --kubeconfig /var/lib/jenkins/.kube/sl_${CLUSTER_NAME}"
-        AWS_ACCESS_KEY_ID = credentials('jenkins-aws-secret-key-id')
-        AWS_SECRET_ACCESS_KEY = credentials('jenkins-aws-secret-access-key')
+        KUBECTL = "kubectl -n ${NAMESPACE} --kubeconfig /var/lib/jenkins/.kube/tz_${CLUSTER_NAME}"
 
         GIT_CREDENTIAL = 'github-token'
         GITHUP_TOKEN = credentials('GITHUP_TOKEN')
-        VAULT_TOKEN = credentials('vault-token')
+        VAULT_TOKEN = credentials('vault_token')
         ARGOCD_ID = "admin"
-        ARGOCD_PASSWORD = credentials('argocd_password')
+        ARGOCD_PASSWORD = "DevOps!323"
 
         WORKSPACE= "/home/jenkins/agent/workspace/${APP_NAME}"
-        REPOSITORY_TAG = "${ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${DOCKER_NAME}:${BUILD_NUMBER}"
+        REPOSITORY_TAG = "harbor.default.${CLUSTER_NAME}.${DOMAIN}/${DOCKER_NAME}:${BUILD_NUMBER}"
+        DOCKER_PASSWORD = credentials('DOCKER_PASSWORD')
     }
 
     agent {
@@ -51,14 +48,14 @@ spec:
   serviceAccountName: jenkins
   containers:
   - name: devops2
-    image: topzone8713/devops-utils2:latest
+    image: doogee323/devops-utils2:latest
     resources:
       requests:
-        memory: 500Mi
-        cpu: "500m"
+        memory: 200Mi
+        cpu: "200m"
       limits:
         memory: 1Gi
-        cpu: "1000m"
+        cpu: "300m"
     tty: true
     command: ["sleep"]
     args: ["99d"]
@@ -71,14 +68,11 @@ spec:
     imagePullPolicy: Always
     resources:
       requests:
-        memory: 500Mi
-        cpu: "500m"
+        memory: 200Mi
+        cpu: "200m"
       limits:
-        memory: 2Gi
-        cpu: "2000m"
-    env:
-      - name: AWS_SDK_LOAD_CONFIG
-        value: "true"
+        memory: 1Gi
+        cpu: "300m"
     tty: true
     command: ["sleep"]
     args: ["99d"]
@@ -87,8 +81,6 @@ spec:
         mountPath: /root/shared-data
       - name: docker-config
         mountPath: /root/.docker
-      - name: aws-secret
-        mountPath: /root/.aws/
 
   restartPolicy: Never
   volumes:
@@ -97,9 +89,6 @@ spec:
     - name: docker-config
       configMap:
         name: docker-config
-    - name: aws-secret
-      secret:
-        secretName: aws-secret
             """
         }
     }
@@ -140,7 +129,7 @@ spec:
                     steps {
                         container("kaniko2") {
                             script {
-                                sh "/kaniko/executor --dockerfile=Dockerfile --context=/root/shared-data/${DOCKER_NAME} --build-arg NODE_ENV=${NODE_ENV} --destination=${ACCOUNT_ID}.dkr.ecr.${env.AWS_DEFAULT_REGION}.amazonaws.com/${DOCKER_NAME}:${env.BUILD_NUMBER} --use-new-run --cleanup"
+                                sh "/kaniko/executor --dockerfile=Dockerfile --context=/root/shared-data/${DOCKER_NAME} --build-arg NODE_ENV=${NODE_ENV} --destination=${REPOSITORY_TAG} --use-new-run --cleanup"
                             }
                         }
                     }

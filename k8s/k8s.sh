@@ -13,9 +13,6 @@ CONFIG_FILE=$(echo ${CLUSTER_NAME} | sed 's/eks-main/project/')
 
 # 로그 파일에 환경 변수 기록
 {
-    echo "AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}"
-    echo "AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}"
-    echo "AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION}"
     echo "APP_NAME: ${APP_NAME}"
     echo "GIT_BRANCH: ${GIT_BRANCH}"
     echo "BUILD_NUMBER: ${BUILD_NUMBER}"
@@ -29,6 +26,7 @@ CONFIG_FILE=$(echo ${CLUSTER_NAME} | sed 's/eks-main/project/')
     echo "VAULT_TOKEN: ${VAULT_TOKEN}"
     echo "ARGOCD_ID: ${ARGOCD_ID}"
     echo "ARGOCD_PASSWORD: ${ARGOCD_PASSWORD}"
+    echo "DOCKER_PASSWORD: ${DOCKER_PASSWORD}"
 } >> log
 
 ACTION=${1}
@@ -76,10 +74,6 @@ if [[ "${ACTION}" == "vault_config" ]]; then
   exit 0
 fi
 
-# AWS STS 호출
-echo "================================================"
-echo "aws sts get-caller-identity"
-aws sts get-caller-identity
 echo "================================================"
 echo "****** ACTION: $1"
 echo "================================================"
@@ -124,7 +118,7 @@ if [[ -z "${IMAGE_TAG}" ]]; then
 fi
 echo "IMAGE_TAG: ${IMAGE_TAG}"
 if [[ -z "${REPO_HOST}" ]]; then
-  REPO_HOST="${ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
+  REPO_HOST="harbor.default.topzone-k8s.topzone.me"
 fi
 echo "REPO_HOST: ${REPO_HOST}"
 if [[ -z "${REPOSITORY_TAG}" ]]; then
@@ -176,29 +170,11 @@ if [[ "${STAGING}" == "prod" || "${STAGING}" == "staging" || "${STAGING}" == "qa
   NAMESPACE=${NAMESPACE/-prod/}
   PROJECT=${NAMESPACE}
 else
-  if [[ $NAMESPACE != *-dev ]]; then
-    NAMESPACE=${NAMESPACE}"-dev"
-  else
-    NAMESPACE=${NAMESPACE}
-  fi
-  PROJECT=${NAMESPACE/-dev/}
+  NAMESPACE="${NAMESPACE}-dev"
+  PROJECT=${NAMESPACE}
 fi
 KUBECTL="kubectl -n ${NAMESPACE} --kubeconfig ${WORKSPACE}/resources/kubeconfig_eks-main"
 echo "================================================"
-
-# Kubernetes 초기화 함수
-function k8s_init {
-  echo "#######################################"
-  echo k8s init
-  echo "#######################################"
-  REPO_IMAGE=$(aws ecr list-images --repository-name ${DOCKER_NAME})
-  if [[ $? != 0 ]]; then
-    aws ecr create-repository \
-        --repository-name ${DOCKER_NAME} \
-        --image-tag-mutability IMMUTABLE
-    sleep 3
-  fi
-}
 
 # Kubernetes 파일 처리 함수
 function k8s_file {
@@ -264,9 +240,7 @@ function alert_slack {
 }
 
 # ACTION에 따른 작업 수행
-if [[ "${ACTION}" == "init" ]]; then
-  k8s_init
-elif [[ "${ACTION}" == "argocd_init" ]]; then
+if [[ "${ACTION}" == "argocd_init" ]]; then
   argocd_init
 elif [[ "${ACTION}" == "argocd_delete" ]]; then
   argocd_delete
@@ -274,12 +248,7 @@ elif [[ "${ACTION}" == "build" ]]; then
   echo "#######################################"
   echo "BUILD_CMD: ${BUILD_CMD}"
   echo "#######################################"
-
-  echo "AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION}"
-  echo "CLUSTER_NAME: ${CLUSTER_NAME}"
-  echo "ACCOUNT_ID: ${ACCOUNT_ID}"
-  aws ecr get-login-password --region ${AWS_DEFAULT_REGION} \
-      | docker login --username AWS --password-stdin ${ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com
+  docker login harbor.default.${CLUSTER_NAME}.${DOMAIN} --username admin --password ${DOCKER_PASSWORD}
 
   if [[ "${BUILD_CMD}" != "" ]]; then
     ${BUILD_CMD}
@@ -317,13 +286,11 @@ elif [[ "${ACTION}" == "build" ]]; then
     trace_off
   fi
 elif [[ "${ACTION}" == "push" ]]; then
-  k8s_init
   echo "#######################################"
   echo Push image
   echo "#######################################"
   trace_on
-  aws ecr get-login-password --region ${AWS_DEFAULT_REGION} \
-    | docker login --username AWS --password-stdin ${ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com
+  docker login harbor.default.${CLUSTER_NAME}.${DOMAIN} --username admin --password ${DOCKER_PASSWORD}
   docker push ${REPO_HOST}/${IMAGE_TAG}
   if [[ $? != 0 ]]; then
     echo "Error occurred!"
@@ -452,47 +419,6 @@ elif [[ "${ACTION}" == "verify" ]]; then
     echo "Failed to deploy in k8s!!!"
     alert_slack
     exit 1
-  fi
-  trace_off
-elif [[ "${ACTION}" == "s3" ]]; then
-  echo "#######################################"
-  echo "DIST: ${DIST}"
-  echo "S3_BUCKET: ${S3_BUCKET}"
-  echo "DIST_DOCKER: ${DIST_DOCKER}"
-  echo "CLOUDFRONT_ID: ${CLOUDFRONT_ID}"
-  echo "#######################################"
-  trace_on
-
-  # aws s3 rm s3://${S3_BUCKET} --recursive
-  if [[ "${DIST}" != "" && "${S3_BUCKET}" != "" ]]; then
-    aws s3 cp --recursive ./${DIST}/ s3://${S3_BUCKET} --region ${AWS_DEFAULT_REGION}
-    if [[ $? != 0 ]]; then
-      echo "Failed to push to s3!!!"
-      alert_slack
-      exit 1
-    fi
-  elif [[ "${DIST_DOCKER}" != "" && "${S3_BUCKET}" != "" ]]; then
-    docker run -d --rm ${REPOSITORY_TAG}
-    sleep 10
-    DOCKER_ID=`docker ps | grep ${REPOSITORY_TAG} | awk '{print $1}'`
-    docker cp ${DOCKER_ID}:${DIST_DOCKER} dist_docker
-    ls -al dist_docker
-    docker kill ${DOCKER_ID}
-    aws s3 cp --recursive ./dist_docker/ s3://${S3_BUCKET} --region ${AWS_DEFAULT_REGION}
-    if [[ $? != 0 ]]; then
-      echo "Failed to push to s3!!!"
-      alert_slack
-      exit 1
-    fi
-  fi
-
-  if [[ "${CLOUDFRONT_ID}" != "" ]]; then
-    aws cloudfront create-invalidation --distribution-id ${CLOUDFRONT_ID} --paths '/*' --region ${AWS_DEFAULT_REGION}
-    if [[ $? != 0 ]]; then
-      echo "Failed to invalidate Cloudfront Cache!!!"
-      alert_slack
-      exit 1
-    fi
   fi
   trace_off
 elif [[ "${ACTION}" == "slack" ]]; then

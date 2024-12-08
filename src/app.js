@@ -38,8 +38,7 @@ app.post('/gpt', function (req, res) {
 
         let params = {
             messages: messages,
-            model: 'gpt-3.5-turbo',
-            // model: process.env.MODEL_ID,
+            model: process.env.MODEL_ID,
             max_tokens: 2048,
             temperature: 0,
         }
@@ -89,12 +88,15 @@ app.post('/gpt', function (req, res) {
     }
 
     getGPT3Response(prompt).then(response => {
-      console.log(response);
       res.status(200).send(response);
     }).catch(error => {
       console.error(error);
       res.status(502).send('error!!!');
     });
+})
+
+app.get('/health', (req, res) => {
+    res.status(200).json({ status: 'OK', timestamp: new Date() });
 })
 
 app.listen(3000)

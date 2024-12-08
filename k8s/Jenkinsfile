@@ -129,7 +129,10 @@ spec:
                     steps {
                         container("kaniko2") {
                             script {
-                                sh "/kaniko/executor --dockerfile=Dockerfile --context=/root/shared-data/${DOCKER_NAME} --build-arg NODE_ENV=${NODE_ENV} --destination=${REPOSITORY_TAG} --use-new-run --cleanup"
+                                sh """
+                                git config --global --add safe.directory ${WORKSPACE}
+                                /kaniko/executor --dockerfile=Dockerfile --context=/root/shared-data/${DOCKER_NAME} --build-arg NODE_ENV=${NODE_ENV} --destination=${REPOSITORY_TAG} --use-new-run --cleanup
+                                """
                             }
                         }
                     }
@@ -141,7 +144,6 @@ spec:
             steps {
                 container("devops2") {
                     sh """
-                    git config --global --add safe.directory ${WORKSPACE}
                     bash ./k8s/k8s.sh apply
                     """
                 }

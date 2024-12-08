@@ -27,7 +27,7 @@ pipeline {
 
         GIT_CREDENTIAL = 'github-token'
         GITHUP_TOKEN = credentials('GITHUP_TOKEN')
-        VAULT_TOKEN = credentials('vault_token')
+        VAULT_TOKEN = credentials('VAULT_TOKEN')
         ARGOCD_ID = "admin"
         ARGOCD_PASSWORD = "DevOps!323"
 

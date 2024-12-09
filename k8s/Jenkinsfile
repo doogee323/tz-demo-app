@@ -79,8 +79,6 @@ spec:
     volumeMounts:
       - name: docker-config
         mountPath: /kaniko/.docker
-//       - name: config-json
-//         mountPath: /kaniko/.docker
       - name: harbor-ca-cert
         mountPath: /kaniko/certs
       - name: shared-data
@@ -90,9 +88,6 @@ spec:
     - name: docker-config
       secret:
         secretName: harbor-registry-secret
-//     - name: config-json
-//       configMap:
-//         name: harbor-registry-config
     - name: harbor-ca-cert
       configMap:
         name: harbor-ca-cert

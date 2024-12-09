@@ -77,23 +77,27 @@ spec:
     command: ["sleep"]
     args: ["99d"]
     volumeMounts:
+      - name: docker-config
+        mountPath: /kaniko/.docker
+//       - name: config-json
+//         mountPath: /kaniko/.docker
       - name: harbor-ca-cert
         mountPath: /kaniko/certs
       - name: shared-data
         mountPath: /root/shared-data
-      - name: docker-config
-        mountPath: /root/.docker
-
   restartPolicy: Never
   volumes:
+    - name: docker-config
+      secret:
+        secretName: harbor-registry-secret
+//     - name: config-json
+//       configMap:
+//         name: harbor-registry-config
     - name: harbor-ca-cert
       configMap:
         name: harbor-ca-cert
     - name: shared-data
       emptyDir: {}
-    - name: docker-config
-      configMap:
-        name: docker-config
             """
         }
     }
@@ -146,7 +150,7 @@ spec:
                                 sh """
                                 echo /kaniko/executor --dockerfile=Dockerfile --context=/root/shared-data/${DOCKER_NAME} --build-arg NODE_ENV=${NODE_ENV} \
                                     --destination=${REPOSITORY_TAG} --use-new-run --cleanup \
-                                    --ssl-cert-dir=/kaniko/certs --insecure --force
+                                    --insecure --force
                                 sleep 1000
 //                                     --registry-certificate=registry:5000=/kaniko/.custom-certs/ca-certificates.crt
                                 """

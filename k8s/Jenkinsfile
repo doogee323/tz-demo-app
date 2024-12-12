@@ -77,15 +77,15 @@ spec:
     command: ["sleep"]
     args: ["99d"]
     volumeMounts:
-      - name: harbor-registry-secret
+      - name: docker-config
         mountPath: /root/.docker
       - name: shared-data
         mountPath: /root/shared-data
   restartPolicy: Never
   volumes:
-    - name: harbor-registry-secret
+    - name: docker-config
       secret:
-        secretName: harbor-registry-secret
+        secretName: docker-config
     - name: shared-data
       emptyDir: {}
             """

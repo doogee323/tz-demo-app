@@ -64,7 +64,8 @@ spec:
         mountPath: /root/shared-data
 
   - name: kaniko2
-    image: gcr.io/kaniko-project/executor:v1.7.0-debug
+//     image: gcr.io/kaniko-project/executor:v1.7.0-debug
+    image: harbor.default.topzone-k8s.topzone.me/kaniko-project/executor:v1.7.0-debug
     imagePullPolicy: Always
     resources:
       requests:
@@ -79,8 +80,6 @@ spec:
     volumeMounts:
       - name: docker-config
         mountPath: /kaniko/.docker
-      - name: harbor-ca-cert
-        mountPath: /kaniko/certs
       - name: shared-data
         mountPath: /root/shared-data
   restartPolicy: Never
@@ -88,9 +87,6 @@ spec:
     - name: docker-config
       secret:
         secretName: harbor-registry-secret
-    - name: harbor-ca-cert
-      configMap:
-        name: harbor-ca-cert
     - name: shared-data
       emptyDir: {}
             """
@@ -147,7 +143,6 @@ spec:
                                     --destination=${REPOSITORY_TAG} --use-new-run --cleanup \
                                     --insecure --force
                                 sleep 1000
-//                                     --registry-certificate=registry:5000=/kaniko/.custom-certs/ca-certificates.crt
                                 """
                             }
                         }

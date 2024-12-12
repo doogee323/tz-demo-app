@@ -77,13 +77,13 @@ spec:
     command: ["sleep"]
     args: ["99d"]
     volumeMounts:
-      - name: docker-config
-        mountPath: /kaniko/.docker
+      - name: harbor-registry-secret
+        mountPath: /root/.docker
       - name: shared-data
         mountPath: /root/shared-data
   restartPolicy: Never
   volumes:
-    - name: docker-config
+    - name: harbor-registry-secret
       secret:
         secretName: harbor-registry-secret
     - name: shared-data

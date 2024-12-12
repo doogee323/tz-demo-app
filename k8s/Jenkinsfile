@@ -64,7 +64,7 @@ spec:
         mountPath: /root/shared-data
 
   - name: kaniko2
-    image: topzone8713/kaniko-executor:v1.7.0-debug
+    image: gcr.io/kaniko-project/executor:v1.7.0-debug
     imagePullPolicy: Always
     resources:
       requests:
@@ -139,9 +139,7 @@ spec:
                             script {
                                 sh """
                                 echo /kaniko/executor --dockerfile=Dockerfile --context=/root/shared-data/${DOCKER_NAME} --build-arg NODE_ENV=${NODE_ENV} \
-                                    --destination=${REPOSITORY_TAG} --use-new-run --cleanup \
-                                    --insecure --force
-                                sleep 1000
+                                    --destination=${REPOSITORY_TAG} --use-new-run --cleanup
                                 """
                             }
                         }

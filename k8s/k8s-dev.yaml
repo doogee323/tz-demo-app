@@ -17,7 +17,7 @@ spec:
         app: tz-demo-app-${GIT_BRANCH}
     spec:
       imagePullSecrets:
-        - name: registry-creds
+        - name: tz-registrykey
       containers:
       - name: tz-demo-app-${GIT_BRANCH}
         image: ${REPOSITORY_TAG}

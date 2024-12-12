@@ -17,7 +17,7 @@ spec:
         app: tz-demo-app
     spec:
       imagePullSecrets:
-        - name: registry-creds
+        - name: tz-registrykey
       containers:
       - name: tz-demo-app
         image: ${REPOSITORY_TAG}

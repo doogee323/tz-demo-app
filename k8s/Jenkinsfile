@@ -64,7 +64,7 @@ spec:
         mountPath: /root/shared-data
 
   - name: kaniko2
-    image: harbor.default.topzone-k8s.topzone.me/kaniko-project/executor:v1.7.0-debug
+    image: topzone8713/kaniko-executor:v1.7.0-debug
     imagePullPolicy: Always
     resources:
       requests:

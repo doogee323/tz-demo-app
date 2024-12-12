@@ -138,8 +138,9 @@ spec:
                         container("kaniko2") {
                             script {
                                 sh """
-                                /kaniko/executor --dockerfile=Dockerfile --context=/root/shared-data/${DOCKER_NAME} --build-arg NODE_ENV=${NODE_ENV} \
+                                echo /kaniko/executor --dockerfile=Dockerfile --context=/root/shared-data/${DOCKER_NAME} --build-arg NODE_ENV=${NODE_ENV} \
                                     --destination=${REPOSITORY_TAG} --use-new-run --cleanup --force
+                                sleep 1000
                                 """
                             }
                         }

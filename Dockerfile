@@ -1,9 +1,2 @@
-FROM node:16
-
-WORKDIR /app
-COPY . /app
-
-RUN npm install
-CMD node src/app.js
-
+FROM nginx:latest
 EXPOSE 3000

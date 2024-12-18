@@ -32,7 +32,7 @@ pipeline {
         ARGOCD_PASSWORD = "DevOps!323"
 
         WORKSPACE= "/home/jenkins/agent/workspace/${APP_NAME}"
-        REPOSITORY_TAG = "harbor.default.${CLUSTER_NAME}.${DOMAIN}/${CLUSTER_NAME}/${DOCKER_NAME}:${BUILD_NUMBER}"
+        REPOSITORY_TAG = "harbor.harbor.${CLUSTER_NAME}.${DOMAIN}/${CLUSTER_NAME}/${DOCKER_NAME}:${BUILD_NUMBER}"
         DOCKER_PASSWORD = credentials('DOCKER_PASSWORD')
     }
 

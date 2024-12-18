@@ -118,7 +118,7 @@ if [[ -z "${IMAGE_TAG}" ]]; then
 fi
 echo "IMAGE_TAG: ${IMAGE_TAG}"
 if [[ -z "${REPO_HOST}" ]]; then
-  REPO_HOST="harbor.default.topzone-k8s.topzone.me"
+  REPO_HOST="harbor.harbor.topzone-k8s.topzone.me"
 fi
 echo "REPO_HOST: ${REPO_HOST}"
 if [[ -z "${REPOSITORY_TAG}" ]]; then
@@ -248,7 +248,7 @@ elif [[ "${ACTION}" == "build" ]]; then
   echo "#######################################"
   echo "BUILD_CMD: ${BUILD_CMD}"
   echo "#######################################"
-  docker login harbor.default.${CLUSTER_NAME}.${DOMAIN} --username admin --password ${DOCKER_PASSWORD}
+  docker login harbor.harbor.${CLUSTER_NAME}.${DOMAIN} --username admin --password ${DOCKER_PASSWORD}
 
   if [[ "${BUILD_CMD}" != "" ]]; then
     ${BUILD_CMD}
@@ -290,7 +290,7 @@ elif [[ "${ACTION}" == "push" ]]; then
   echo Push image
   echo "#######################################"
   trace_on
-  docker login harbor.default.${CLUSTER_NAME}.${DOMAIN} --username admin --password ${DOCKER_PASSWORD}
+  docker login harbor.harbor.${CLUSTER_NAME}.${DOMAIN} --username admin --password ${DOCKER_PASSWORD}
   docker push ${REPO_HOST}/${IMAGE_TAG}
   if [[ $? != 0 ]]; then
     echo "Error occurred!"

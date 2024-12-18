@@ -53,9 +53,6 @@ spec:
   containers:
   - name: devops2
     image: topzone8713/devops-utils2:latest
-    envFrom:
-    - secretRef:
-        name: tz-devops-jenkins-dev-es
     resources:
       requests:
         memory: 200Mi
@@ -73,9 +70,6 @@ spec:
   - name: kaniko2
     image: gcr.io/kaniko-project/executor:v1.7.0-debug
     imagePullPolicy: Always
-    envFrom:
-    - secretRef:
-        name: tz-devops-jenkins-dev-es
     resources:
       requests:
         memory: 200Mi

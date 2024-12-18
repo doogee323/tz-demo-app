@@ -53,6 +53,9 @@ spec:
   containers:
   - name: devops2
     image: topzone8713/devops-utils2:latest
+    envFrom:
+    - secretRef:
+        name: tz-devops-jenkins-dev-es
     resources:
       requests:
         memory: 200Mi
@@ -70,6 +73,9 @@ spec:
   - name: kaniko2
     image: gcr.io/kaniko-project/executor:v1.7.0-debug
     imagePullPolicy: Always
+    envFrom:
+    - secretRef:
+        name: tz-devops-jenkins-dev-es
     resources:
       requests:
         memory: 200Mi
@@ -81,17 +87,17 @@ spec:
     command: ["sleep"]
     args: ["99d"]
     volumeMounts:
-      - name: docker-config
-        mountPath: /kaniko/.docker
       - name: shared-data
         mountPath: /root/shared-data
+      - name: docker-config
+        mountPath: /root/.docker
   restartPolicy: Never
   volumes:
-    - name: docker-config
-      secret:
-        secretName: harbor-registry-secret
     - name: shared-data
       emptyDir: {}
+    - name: docker-config
+      secret:
+        secretName: tz-registrykey
             """
         }
     }

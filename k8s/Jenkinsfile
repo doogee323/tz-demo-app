@@ -142,7 +142,7 @@ spec:
                         container("kaniko2") {
                             script {
                                 sh """
-                                #mkdir -p /kaniko/.docker && ln -s /root/.docker/.dockerconfigjson /kaniko/.docker/config.json
+                                # mkdir -p /kaniko/.docker && ln -s /root/.docker/.dockerconfigjson /kaniko/.docker/config.json
 
                                 export DOCKER_USERNAME="admin"
                                 export DOCKER_PASSWORD="Harbor12345"
@@ -151,8 +151,8 @@ spec:
                                 cat <<EOF > /kaniko/.docker/config.json
                                 {
                                   "auths": {
-                                    "$DOCKER_SERVER": {
-                                      "auth": "`echo -n "$DOCKER_USERNAME:$DOCKER_PASSWORD" | base64`"
+                                    "harbor.harbor.topzone-k8s.topzone.me": {
+                                      "auth": "`echo -n "admin:Harbor12345" | base64`"
                                     }
                                   }
                                 }

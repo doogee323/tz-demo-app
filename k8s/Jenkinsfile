@@ -152,7 +152,7 @@ spec:
                                 {
                                   "auths": {
                                     "$DOCKER_SERVER": {
-                                      "auth": "$(echo -n "$DOCKER_USERNAME:$DOCKER_PASSWORD" | base64)"
+                                      "auth": "`echo -n "$DOCKER_USERNAME:$DOCKER_PASSWORD" | base64`"
                                     }
                                   }
                                 }

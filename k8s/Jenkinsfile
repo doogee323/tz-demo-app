@@ -72,11 +72,11 @@ spec:
     imagePullPolicy: Always
     resources:
       requests:
-        memory: 400Mi
-        cpu: "400m"
+        memory: 500Mi
+        cpu: "500m"
       limits:
         memory: 1Gi
-        cpu: "500m"
+        cpu: "700m"
     tty: true
     command: ["sleep"]
     args: ["99d"]

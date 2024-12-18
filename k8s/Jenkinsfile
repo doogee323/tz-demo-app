@@ -142,7 +142,22 @@ spec:
                         container("kaniko2") {
                             script {
                                 sh """
-                                mkdir -p /kaniko/.docker && ln -s /root/.docker/.dockerconfigjson /kaniko/.docker/config.json
+                                #mkdir -p /kaniko/.docker && ln -s /root/.docker/.dockerconfigjson /kaniko/.docker/config.json
+
+                                export DOCKER_USERNAME="admin"
+                                export DOCKER_PASSWORD="Harbor12345"
+                                export DOCKER_SERVER="harbor.harbor.topzone-k8s.topzone.me"
+                                mkdir -p /kaniko/.docker
+                                cat <<EOF > /kaniko/.docker/config.json
+                                {
+                                  "auths": {
+                                    "$DOCKER_SERVER": {
+                                      "auth": "$(echo -n "$DOCKER_USERNAME:$DOCKER_PASSWORD" | base64)"
+                                    }
+                                  }
+                                }
+                                EOF
+
                                 /kaniko/executor --dockerfile=Dockerfile --context=/root/shared-data/${DOCKER_NAME} --build-arg NODE_ENV=${NODE_ENV} \
                                     --destination=${REPOSITORY_TAG} --use-new-run --cleanup --force --skip-tls-verify
                                 """

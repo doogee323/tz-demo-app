@@ -89,7 +89,7 @@ spec:
   volumes:
     - name: docker-config
       secret:
-        secretName: docker-config
+        secretName: harbor-registry-secret
     - name: shared-data
       emptyDir: {}
             """

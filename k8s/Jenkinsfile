@@ -142,9 +142,6 @@ spec:
                         container("kaniko2") {
                             script {
                                 sh """
-                                export DOCKER_USERNAME="admin"
-                                export DOCKER_PASSWORD="Harbor12345"
-                                export DOCKER_SERVER="harbor.harbor.topzone-k8s.topzone.me"
                                 mkdir -p /kaniko/.docker && ln -s /root/.docker/.dockerconfigjson /kaniko/.docker/config.json
                                 echo /kaniko/executor --dockerfile=Dockerfile --context=/root/shared-data/${DOCKER_NAME} --build-arg NODE_ENV=${NODE_ENV} \
                                     --destination=${REPOSITORY_TAG} --use-new-run --cleanup --force --skip-tls-verify

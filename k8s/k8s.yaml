@@ -16,8 +16,13 @@ spec:
         environment: ${STAGING}
         app: tz-demo-app
     spec:
+      hostAliases:
+      - ip: "192.168.86.200"
+        hostnames:
+        - "harbor.harbor.topzone-k8s.topzone.me"
       imagePullSecrets:
         - name: tz-registrykey
+      serviceAccountName: devops-prod-svcaccount
       containers:
       - name: tz-demo-app
         image: ${REPOSITORY_TAG}
@@ -36,6 +41,8 @@ spec:
         envFrom:
         - configMapRef:
             name: tz-demo-app-configmap
+        - secretRef:
+            name: tz-demo-app-dev-es
 
 ---
 apiVersion: v1

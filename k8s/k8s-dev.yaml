@@ -22,6 +22,7 @@ spec:
         - "harbor.harbor.topzone-k8s.topzone.me"
       imagePullSecrets:
         - name: tz-registrykey
+      serviceAccountName: devops-dev-svcaccount
       containers:
       - name: tz-demo-app-${GIT_BRANCH}
         image: ${REPOSITORY_TAG}
@@ -68,7 +69,6 @@ data:
   DB_R_HOSTNAME: host.docker.internal
 
 ---
-
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:

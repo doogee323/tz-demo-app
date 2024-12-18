@@ -84,7 +84,7 @@ spec:
       - name: shared-data
         mountPath: /root/shared-data
       - name: docker-config
-        mountPath: /kaniko/.docker
+        mountPath: /root/.docker
   restartPolicy: Never
   volumes:
     - name: shared-data
@@ -142,6 +142,7 @@ spec:
                         container("kaniko2") {
                             script {
                                 sh """
+                                mkdir -p /kaniko/.docker && ln -s /root/.docker/.dockerconfigjson /kaniko/.docker/config.json
                                 echo /kaniko/executor --dockerfile=Dockerfile --context=/root/shared-data/${DOCKER_NAME} --build-arg NODE_ENV=${NODE_ENV} \
                                     --destination=${REPOSITORY_TAG} --use-new-run --cleanup --force --skip-tls-verify
                                 sleep 1000

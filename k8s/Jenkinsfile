@@ -55,8 +55,8 @@ spec:
     image: topzone8713/devops-utils2:latest
     resources:
       requests:
-        memory: 300Mi
-        cpu: "300m"
+        memory: 100Mi
+        cpu: "100m"
       limits:
         memory: 1Gi
         cpu: "300m"
@@ -72,11 +72,11 @@ spec:
     imagePullPolicy: Always
     resources:
       requests:
-        memory: 200Mi
-        cpu: "200m"
+        memory: 400Mi
+        cpu: "400m"
       limits:
         memory: 1Gi
-        cpu: "300m"
+        cpu: "500m"
     tty: true
     command: ["sleep"]
     args: ["99d"]

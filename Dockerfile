@@ -8,12 +8,14 @@ RUN npm install
 
 COPY . /app
 
+RUN npm install -g pkg && pkg .
+
 FROM node:16-alpine
 
 WORKDIR /app
 
-COPY --from=builder /app /app
+COPY --from=builder /app/dist/app /app/app
 
 EXPOSE 3000
 
-CMD ["node", "src/app.js"]
+CMD ["./app"]

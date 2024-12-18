@@ -14,8 +14,8 @@ FROM node:16-alpine
 
 WORKDIR /app
 
-COPY --from=builder /app/tz-demo-app-linux /app/run
+COPY --from=builder /app/tz-demo-app-linux /app/exe
 
 EXPOSE 3000
 
-CMD ["./run"]
+CMD ["./exe"]

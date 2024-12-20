@@ -11,82 +11,129 @@
   <body>
     <div class="container mt-2">
       <header>
-        <h2>ChatGPT Demo App</h2>
+        <h2>Demo App</h2>
       </header>
-      <form id="myForm">
-          <div class="form-group row">
-            <select id="isChat" name="isChat" class="form-control col-lg-1">
-                <option value="chat">Chat</option>
-                <option value="">Query</option>
-            </select>
-            <div class="col-lg-9">
-              <input id="prompt" name="prompt" type="text" class="form-control" value=" 챗GPT에 대해서 설명해줘." required>
-            </div>
-            <div class="col-lg-2">
-              <button type="submit" class="btn btn-primary once">Submit</button>
+  <div>
+    <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+      <h1 class="display-5">DevOps Tools </h1>
+      <p class="lead"></p>
+    </div>
+    <div class="container">
+      <div class="col-lg-12">
+        <div class="card card-default">
+          <div class="card-body form-inline">
+            <div class="col-sm-4"><h3>K8S Monitoring/Logging</h3></div>
+            <div class="col-sm-8">
+              <label class="col-sm-12 form-group">
+                <h4><a class="cluster-link a-link" href="https://grafana.default.topzone-k8s.topzone.me"
+                       target="_blank">Grafana</a></h4>
+              </label><h5 class="text-center"></h5>
             </div>
           </div>
-          <div class="form-group row">
-              <textarea id="detail" name="detail" rows="10" class="form-control noresize"></textarea>
-          </div>
-      </form>
-      <footer>
-        <p><a href="https://platform.openai.com/docs/models/gpt-4" target="_target">References</a></p>
-        <div class="form-group row">
-            <div class="col-lg-9">
-              <textarea rows="9" class="form-control noresize">
-curl https://api.openai.com/v1/chat/completions \
-    -H "Content-Type: application/json" \
-    -H "Authorization: Bearer $OPENAI_API_KEY" \
-    -d '{
-        "model": "gpt-3.5-turbo-0301",
-        "max_tokens": 1000,
-        "messages": [{"role": "user", "content": " 챗GPT에 대해서 설명해줘."}]
-    }'
-              </textarea>
-            </div>
-            <div class="col-lg-9">
-              <textarea rows="11" class="form-control noresize">
-curl https://api.openai.com/v1/chat/completions \
-    -X POST \
-    -H "Content-Type: application/json" \
-    -H "Authorization: Bearer $OPENAI_API_KEY" \
-    -d '{
-        "model": "gpt-3.5-turbo-0301",
-        "max_tokens": 1000,
-        "temperature": 0.5, "max_tokens": 2048, "stream": true,
-        "messages": [{"role": "user", "content": " 챗GPT에 대해서 설명해줘."}]
-    }'
-              </textarea>
-            </div>
-
         </div>
-      </footer>
+        <div class="card card-default">
+          <div class="card-body form-inline">
+            <div class="col-sm-4"><h3>K8S Health Check</h3></div>
+            <div class="col-sm-8">
+              <label class="col-sm-12 form-group">
+                <h4><a class="cluster-link a-link" href="https://prometheus.default.topzone-k8s.topzone.me"
+                       target="_blank">Prometheus</a></h4>&nbsp;/&nbsp;
+                <h4><a class="cluster-link a-link" href="https://alertmanager.default.topzone-k8s.topzone.me"
+                       target="_blank">Alertmanager</a></h4>
+              </label><h5 class="text-center"></h5>
+            </div>
+          </div>
+        </div>
+        <div class="card card-default">
+          <div class="card-body form-inline">
+            <div class="col-sm-4"><h3>CD</h3></div>
+            <div class="col-sm-8">
+              <label class="col-sm-12 form-group">
+                <h4><a class="cluster-link a-link" href="https://argocd.default.topzone-k8s.topzone.me"
+                       target="_blank">Argocd</a></h4>
+              </label><h5 class="text-center"></h5>
+            </div>
+          </div>
+        </div>
+        <div class="card card-default">
+          <div class="card-body form-inline">
+            <div class="col-sm-4"><h3>Password Management</h3></div>
+            <div class="col-sm-8">
+              <label class="col-sm-12 form-group">
+                <h4><a class="cluster-link a-link" href="https://vault.default.topzone-k8s.topzone.me"
+                       target="_blank">Vault</a></h4>&nbsp;/&nbsp;
+                <h4><a class="cluster-link a-link" href="https://consul.default.topzone-k8s.topzone.me"
+                       target="_blank">Consul</a></h4>
+              </label><h5 class="text-center"></h5>
+            </div>
+          </div>
+        </div>
+        <hr>
+      </div>
+      <div class="col-lg-12">
+        <div class="card card-default">
+          <div class="card-body form-inline">
+            <div class="col-sm-4"><h3>CI</h3></div>
+            <div class="col-sm-8">
+              <label class="col-sm-12 form-group">
+                <h4><a href="https://jenkins.default.topzone-k8s.topzone.me/" target="_blank">Jenkins</a></h4>
+              </label><h5 class="text-center"></h5>
+            </div>
+          </div>
+        </div>
+        <div class="card card-default">
+          <div class="card-body form-inline">
+            <div class="col-sm-4"><h3>Docker Repo</h3></div>
+            <div class="col-sm-8">
+              <label class="col-sm-12 form-group">
+                <h4><a class="cluster-link a-link"
+                       href="https://harbor.default.topzone-k8s.topzone.me/"
+                       target="_blank">Harbor</a></h4>
+              </label><h5 class="text-center"></h5>
+            </div>
+          </div>
+        </div>
+        <div class="card card-default">
+          <div class="card-body form-inline">
+            <div class="col-sm-4"><h3>Project Management</h3></div>
+            <div class="col-sm-8">
+              <label class="col-sm-12 form-group">
+                <h4><a href="https://github.com/topzone8713/tz-argocd-repo/tree/main/tz-demo-app">Argo Repo</a></h4>
+              </label><h5 class="text-center"></h5>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
     </div>
   </body>
 </html>
 
 <script>
-    $(document).ready(function () {
-        $("#myForm").submit(function (e1) {
-            $('#detail').text('');
-            $.ajax({
-                url: "/gpt",
-                type: "POST",
-                data: $('#myForm').serialize(),
-                dataType: "json",
-                timeout: 200000,
-                success: function(e){
-                    console.log(e);
-                    $('#detail').text(e.message);
-                },
-                error: function(e){
-                    console.log(e);
-                    $('#detail').text(e.responseText);
-                },
-            });
-            e1.preventDefault();
-        });
-    });
 
+import $ from 'jquery';
+
+export default {
+  name: 'MainPage',
+  components: {},
+  data: function () {
+    return {
+      id: 'main',
+    }
+  },
+  props: [],
+  mounted() {
+    $('.loading').hide();
+    $('.cluster-link').click(function (e) {
+      let url = $(e.currentTarget).attr('href');
+      url = url.replaceAll('topzone-k8s', $('#aws-account').val());
+// eslint-disable-next-line no-debugger
+debugger;
+      window.open(url, "_blank");
+    });
+  },
+  methods: {
+  }
+};
 </script>

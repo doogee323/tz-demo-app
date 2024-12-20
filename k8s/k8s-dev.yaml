@@ -104,7 +104,7 @@ metadata:
 spec:
   refreshInterval: "15s"
   secretStoreRef:
-    name: devops-dev
+    name: devops-stg
     kind: SecretStore
   target:
     name: tz-demo-app-dev-es

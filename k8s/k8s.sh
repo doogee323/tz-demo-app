@@ -118,7 +118,7 @@ if [[ -z "${IMAGE_TAG}" ]]; then
 fi
 echo "IMAGE_TAG: ${IMAGE_TAG}"
 if [[ -z "${REPO_HOST}" ]]; then
-  REPO_HOST="harbor.harbor.topzone-k8s.topzone.me"
+  REPO_HOST="harbor.harbor.topzone-k8s."
 fi
 echo "REPO_HOST: ${REPO_HOST}"
 if [[ -z "${REPOSITORY_TAG}" ]]; then

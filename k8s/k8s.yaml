@@ -17,9 +17,9 @@ spec:
         app: tz-demo-app
     spec:
       hostAliases:
-      - ip: "192.168.86.220"
+      - ip: "192.168.86.200"
         hostnames:
-        - "harbor.harbor.topzone-k8s.topzone.com"
+        - "harbor.harbor.topzone-k8s.topzone.me"
       imagePullSecrets:
         - name: tz-registrykey
       serviceAccountName: devops-prod-svcaccount

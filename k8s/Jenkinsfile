@@ -19,7 +19,7 @@ pipeline {
         USE_ARGOCD = "true"
 
         // Kubernetes Configuration
-        DOMAIN = "topzone.com"
+        DOMAIN = "topzone.me"
         CLUSTER_NAME = "topzone-k8s"
         CERTIFICATE="aaaaaa"
 
@@ -46,9 +46,9 @@ metadata:
   name: devopsBuild
 spec:
   hostAliases:
-  - ip: "192.168.86.220"
+  - ip: "192.168.86.200"
     hostnames:
-    - "harbor.harbor.topzone-k8s.topzone.com"
+    - "harbor.harbor.topzone-k8s.topzone.me"
   serviceAccountName: jenkins
   containers:
   - name: devops2

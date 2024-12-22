@@ -349,6 +349,7 @@ elif [[ "${ACTION}" == "apply" ]]; then
     git config user.email ${GIT_COMMITTER_EMAIL}
     git config --global --add safe.directory /home/jenkins/agent/workspace/${APP_NAME}
     git commit -m 'Update chart'
+    echo git remote set-url origin "https://${GITHUP_ID}:${GITHUP_TOKEN}@github.com/${GITHUP_ID}/tz-argocd-repo.git"
     git remote set-url origin "https://${GITHUP_ID}:${GITHUP_TOKEN}@github.com/${GITHUP_ID}/tz-argocd-repo.git"
     git push origin main -f
     echo "#######################################"

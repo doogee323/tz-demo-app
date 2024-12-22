@@ -142,8 +142,9 @@ spec:
                             script {
                                 sh """
                                 mkdir -p /kaniko/.docker && ln -s /root/.docker/.dockerconfigjson /kaniko/.docker/config.json
-                                /kaniko/executor --dockerfile=Dockerfile --context=/root/shared-data/${DOCKER_NAME} --build-arg NODE_ENV=${NODE_ENV} \
+                                echo /kaniko/executor --dockerfile=Dockerfile --context=/root/shared-data/${DOCKER_NAME} --build-arg NODE_ENV=${NODE_ENV} \
                                     --destination=${REPOSITORY_TAG} --use-new-run --cleanup --force --skip-tls-verify
+                                sleep 1000
                                 """
                             }
                         }
